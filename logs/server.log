@@ -1,2 +1,11 @@
 
 [2026-01-29 15:54:02] GET /health - Status: 200 - Time: 0.003s
+[2026-01-29 17:22:05] GET /stocks/000001/fetch-data - Status: 404 - Time: 0.001s
+[2026-01-29 17:22:51] GET /api/v1/stocks/000001/fetch-data - Status: 405 - Time: 0.000s
+[2026-01-29 17:23:32] GET /api/v1/stocks/000001/fetch-data - Status: 405 - Time: 0.000s
+[2026-01-29 17:30:33] POST /api/v1/stocks/000001/fetch-data - Status: 500 - Time: 5.144s
+[2026-01-29 17:31:42] POST /api/v1/stocks/000001/fetch-data - Status: 500 - Time: 10.492s
+[2026-01-29 17:34:54] POST /api/v1/stocks/000001/fetch-data - Status: 500 - Time: 10.081s
+[2026-01-29 17:35:41] POST /api/v1/stocks/000001.SH/fetch-data - Status: 500 - Time: 9.521s
+[2026-01-29 17:36:05] POST /api/v1/stocks/000001.SZ/fetch-data - Status: 500 - Time: 9.947s
+[2026-01-29 17:38:48] POST /api/v1/stocks/603707/fetch-data - Status: 500 - Time: 11.070s

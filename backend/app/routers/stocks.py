@@ -1,10 +1,12 @@
 # stock数据相关路由
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from fastapi.background import BackgroundTasks
 from typing import List
 
 from database import get_db
-from schemas import StockCreate, StockInDB, StockSimple
+from schemas import StockCreate, StockInDB, StockSimple, OperationResult
+from services.data_fetcher import DataFetcher
 import models
 
 router = APIRouter()
@@ -32,3 +34,39 @@ def get_stock(stock_id: int, db: Session = Depends(get_db)):
     if not stock:
         raise HTTPException(status_code=404, detail="stock不存在")
     return stock
+
+# 测试:
+# curl -X POST "http://127.0.0.1:8082/api/v1/stocks/603707/fetch-data?days=2"
+@router.post("/stocks/{symbol}/fetch-data", response_model=OperationResult)
+async def fetch_stock_data(
+    symbol: str,
+    days: int = 30,
+    background_tasks: BackgroundTasks = None,
+    db: Session = Depends(get_db)
+):
+    """
+    手动获取并更新某只股票的数据
+    
+    - **symbol**: 股票代码
+    - **days**: 获取最近多少天的历史数据
+    - **background**: 是否后台执行（默认立即执行）
+    """
+    fetcher = DataFetcher()
+    
+    # 检查股票是否存在
+    stock = db.query(models.Stock).filter(models.Stock.symbol == symbol).first()
+    if not stock:
+        # 如果不存在，尝试创建
+        result = fetcher.fetch_and_save_stock_with_prices(db, symbol, days)
+    else:
+        # 如果存在，只更新价格数据
+        result = fetcher.fetch_and_save_stock_with_prices(db, symbol, days)
+    
+    if result.get("error"):
+        raise HTTPException(status_code=500, detail=result["error"])
+    
+    return {
+        "success": True,
+        "message": f"成功更新 {symbol} 的数据",
+        "data": result
+    }

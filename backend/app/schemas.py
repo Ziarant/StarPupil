@@ -1,7 +1,7 @@
 # 在 FastAPI 项目中用于定义 API 的“数据契约”（schemas.py）
 # 定义API 输入输出格式的 Pydantic 模型
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List, Optional, Any, Dict
 from datetime import datetime
 from enum import Enum
 from pytz import timezone
@@ -169,4 +169,18 @@ class StockSimple(StockBase):
     
     class Config:
         from_attributes = True
+
+class OperationResult(BaseModel):
+    """
+    标准操作结果响应模型
     
+    用于所有需要返回操作状态的API端点
+    确保所有API返回一致的响应格式
+    """
+    success: bool  # 操作是否成功
+    message: str   # 给用户的提示消息
+    data: Optional[Dict[str, Any]] = None  # 返回的数据（如果有）
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(TZ))  # 响应时间戳
+    
+    class Config:
+        from_attributes = True
