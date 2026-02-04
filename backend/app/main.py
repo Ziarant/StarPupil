@@ -34,10 +34,10 @@ async def lifespan(app: FastAPI):
 
 # 创建 FastAPI 应用实例
 app = FastAPI(
-    title="StarPupil Backend Service",
-    description="Backend service for StarPupil stock analysis platform.",
-    version="1.0.0",
-    lifespan=lifespan
+    title="StarPupil Backend Service",                                          # 应用标题
+    description="Backend service for StarPupil stock analysis platform.",       # 应用描述
+    version="1.0.0",                                                            # 应用版本
+    lifespan=lifespan,                                                         # 生命周期管理
 )
 
 # ============ 中间件配置 =============
@@ -133,5 +133,14 @@ if __name__ == "__main__":
     # INFO:     Application startup complete.
     # INFO:     Uvicorn running on http://127.0.0.1:8082 (Press CTRL+C to quit)
     # 结果表明FastAPI应用已成功启动并监听指定端口。  
+    
+    
+# 当前进度：
+# 运行main.py
+# cmd测试：
+# 更新信息      curl -X POST "http://127.0.0.1:8082/api/v1/stocks/update"
+# 获取信息      curl -X POST "http://127.0.0.1:8082/api/v1/stocks/603707/fetch-data?days=2"
+# 获取财务指标  curl -X POST "http://127.0.0.1:8082/api/v1/stocks/000001/fetch-analysis-indicator?year=2020"
+# 获取日线数据  curl -X POST "http://127.0.0.1:8082/api/v1/stocks/000004/fetch_stock_daily?start_date=20250101&end_date=20260203"
     
     

@@ -36,6 +36,17 @@ def get_db():
     finally:
         db.close()
         
+# 外部调用函数，用于测试数据库连接
+def test_db_connection():
+    """测试数据库连接是否成功"""
+    try:
+        with engine.connect() as connection:
+            print("Database connection successful!")
+            return True
+    except Exception as e:
+        print("Database connection failed:", e)
+        return False
+        
 # 如果直接运行此文件，可以测试数据库连接是否成功
 if __name__ == "__main__":
     try:
